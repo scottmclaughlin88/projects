@@ -1,5 +1,6 @@
 #This is an update to the original lite-ai.py file, including a ranked list of words.
-#Also added this section at the bottom, courtesy of Steve H.
+#The main() function is not in use
+#
 
 def main():
 
