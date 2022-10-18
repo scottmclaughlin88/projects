@@ -1,21 +1,3 @@
-#This is an update to the original lite-ai.py file, including a ranked list of words.
-#The main() function is not in use
-#
-
-def main():
-
-    get_jsonwords()
-    exit()
-
-    messages = get_messages()
-    # print(messages)
-    scores = get_wordscores()
-    # print(scores)
-    message_scores = get_message_scores(messages,scores)
-    for score in message_scores:
-        print(score)
-
-#you can put this on the bottom of your code
-#helps to reduce confusion
-if __name__=="__main__":
-    main()
+#This code will Analyze tweets and store them in a dictionary
+#then score them based on the top 10 worst and best tweets based on word scoring
+#A .csv file is automatically created and formatted with this information.

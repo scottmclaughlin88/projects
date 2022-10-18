@@ -1,11 +1,28 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import csv
 
+#Create a file and dump the 10 best and worst tweets
+def write_top_to_csv(filename,top_tweets,worst_tweets):
+    with open(filename, 'w', newline = '') as csv_file:
+        writer = csv.writer(csv_file, delimiter = ',')
+        writer.writerow(['Best 10 Tweets:'])
+        for index in range(len(top_tweets)):     
+            writer.writerow([index+1,top_tweets[index]])
+        writer.writerow([' '])
+        writer.writerow(['Worst 10 Tweets:'])
+        for index in range(len(worst_tweets)):     
+            writer.writerow([index+1,worst_tweets[index]])
+
+#Format a file with the best and worst tweets
 def get_top_tweets(scored_tweets,num = 10, reverse=False):
     sorted_tweets = dict(sorted(scored_tweets.items(),key = lambda x : x[1],reverse=reverse))
     tweets = list(sorted_tweets.keys())[0:num]
-    return tweets
+    cleantweets = []
+    for tweet in tweets:
+        cleantweets.append(tweet.replace(',','').replace("'", '').replace('[', '').replace(']', ''))
+    return cleantweets
     
 #Create file of words at the 0 index
 def generated_word_scores(word_frequency):
@@ -61,7 +78,6 @@ def get_wordscores():
 
 def clean_messages(messages,bad_letters):
     clean_messages = []
-    # print(bad_letters)
     for message in messages:
         clean_messages.append(clean_message(message,bad_letters))
     return clean_messages
@@ -131,11 +147,11 @@ scores_to_view = list(text_scores.values())[0:3214]
 times = list(range(0,3214))
 times = np.array(times)
 m,b = np.polyfit(times, scores_to_view, 1)
-# print(times)
+
 plt.plot(times, scores_to_view, 'o')
 plt.plot(times, m*times + b, color = 'red')
 plt.show()
-# print(text[0:75])
+
 word_frequency = get_word_frequency(text_as_words)
 word_frequency_filtered = filtered_word_frequency(word_frequency)
 sorted_list = sorted(word_frequency_filtered.items(),key = lambda x : x[1], reverse = True)
@@ -155,6 +171,8 @@ for tweet in top_tweets:
     print(tweet.replace(',','').replace("'", ''))
 print('Best tweets:')
 
-top_tweets = get_top_tweets(text_scores, reverse=True)
-for tweet in top_tweets:
+bottom_tweets = get_top_tweets(text_scores, reverse=True)
+for tweet in bottom_tweets:
     print(tweet.replace(',','').replace("'", ''))
+
+write_top_to_csv('data-export.csv', top_tweets, bottom_tweets)
